@@ -1,0 +1,6 @@
+# Keep config secrets secret
+env.json
+
+# NPM/Yarn
+node_modules/
+
