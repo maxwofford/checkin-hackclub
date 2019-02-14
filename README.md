@@ -1,5 +1,3 @@
-# 
-
 ## Configuration
 
 Dump the following into your environment:
@@ -17,10 +15,11 @@ PASSWORD=replaceme
 # See the production config at https://dashboard.heroku.com/apps/checkin-hackclub/settings
 ```
 
-Also accepts the values in `env.json` while running in development.
+In development you can throw your config into `env.json`, which overrides any environmental variables you may have set.
 
 ## Setup
 
 ```
-$ yarn && yarn start
+# Launch a live reloading server
+$ yarn && yarn dev
 ```
