@@ -1,5 +1,5 @@
 var config = {}
-const configKeys = ['AIRTABLE_API_KEY', 'ZAPIER_WEBHOOK_URL']
+const configKeys = ['AIRTABLE_API_KEY', 'ZAPIER_WEBHOOK_URL', 'PASSWORD']
 
 configKeys.forEach(key => config[key] = process.env[key])
 
