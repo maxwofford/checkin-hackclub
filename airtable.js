@@ -1,8 +1,9 @@
-module.exports = () => {
-  const Airtable = require('airtable')
-  const secrets = require('./secrets')
-  const base = new Airtable({apiKey: secrets['AIRTABLE_API_KEY']}).base('apptEEFG5HTfGQE7h')
+const sendCheckInTo = require('./zapier')
+const Airtable = require('airtable')
+const secrets = require('./secrets')
+const base = new Airtable({apiKey: secrets['AIRTABLE_API_KEY']}).base('apptEEFG5HTfGQE7h')
 
+module.exports = () => {
   const today = [
     'Sunday',
     'Monday',
@@ -17,7 +18,12 @@ module.exports = () => {
     filterByFormula: `{Check-in day} = "${today}"`
   }).eachPage(function page(records, fetchNextPage) {
     records.forEach(record => {
-      console.log(`Retrieved ${record.get('Name')}`)
+      console.log(`Loading a round for ${record.get('Name')}`)
+      const club = {
+        name: record.get('Name'),
+        email: record.get('Contact Email')[0]
+      }
+      sendCheckInTo(club)
     })
 
     fetchNextPage()

@@ -1,10 +1,11 @@
-const config = {
-  'AIRTABLE_API_KEY': process.env['AIRTABLE_API_KEY']
-}
-const env = process.env.NODE_ENV || 'development'
+var config = {}
+const configKeys = ['AIRTABLE_API_KEY', 'ZAPIER_WEBHOOK_URL']
 
+configKeys.forEach(key => config[key] = process.env[key])
+
+const env = process.env.NODE_ENV || 'development'
 if (env == 'development') {
-  config['AIRTABLE_API_KEY'] = require('./env.json')['AIRTABLE_API_KEY']
+  config = Object.assign(config, require('./env.json'))
 }
 
 module.exports = config
