@@ -6,7 +6,7 @@ const triggerCheckIn = require('./airtable')
 const secrets = require('./secrets')
 
 app.get('/', (req, res) => {
-  if (req.param.password == secrets['PASSWORD']) {
+  if (req.query.password == secrets['PASSWORD']) {
     triggerCheckIn()
     res.send('Success!')
   } else {
