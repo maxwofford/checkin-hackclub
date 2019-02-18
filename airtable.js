@@ -18,10 +18,10 @@ module.exports = () => {
     filterByFormula: `{Check-in day} = "${today}"`
   }).eachPage(function page(records, fetchNextPage) {
     records.forEach(record => {
-      console.log(`Loading a round for ${record.get('Name')}`)
       const club = {
         name: record.get('Name'),
-        email: record.get('Contact Email')[0]
+        email: record.get('Contact Email')[0],
+        streak: (record.get('History') || []).length
       }
       sendCheckInTo(club)
     })
