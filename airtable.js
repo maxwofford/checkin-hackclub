@@ -1,7 +1,9 @@
 const sendCheckInTo = require('./zapier')
 const Airtable = require('airtable')
 const secrets = require('./secrets')
-const base = new Airtable({apiKey: secrets['AIRTABLE_API_KEY']}).base('apptEEFG5HTfGQE7h')
+const base = new Airtable({ apiKey: secrets['AIRTABLE_API_KEY'] }).base(
+  'apptEEFG5HTfGQE7h'
+)
 
 module.exports = () => {
   const today = [
@@ -11,24 +13,38 @@ module.exports = () => {
     'Wednesday',
     'Thursday',
     'Friday',
-    'Saturday'
+    'Saturday',
   ][new Date().getDay()]
 
-  base('Clubs').select({
-    filterByFormula: `{Check-in day} = "${today}"`
-  }).eachPage(function page(records, fetchNextPage) {
-    records.forEach(record => {
-      console.log(`Loading a round for ${record.get('Name')}`)
-      const club = {
-        name: record.get('Name'),
-        email: record.get('Contact Email')[0]
-      }
-      sendCheckInTo(club)
+  const fetchClubs = base('Clubs')
+    .select({
+      filterByFormula: `{Check-in day} = "${today}"`,
     })
+    .all()
 
-    fetchNextPage()
-  }, function done(err) {
-    if (err) { console.error(err); return }
+  const fetchEventsFrom = clubName =>
+    base('History')
+      .select({
+        filterByFormula: `AND(
+        FIND('${clubName}', {Club}),
+        OR(
+          FIND('Meeting', {Type}) != 0,
+          FIND('Check-in', {Type}) != 0
+        )
+      )`,
+      })
+      .all()
+
+  fetchClubs.then(clubs => {
+    clubs.forEach(clubRecord => {
+      const club = {}
+      club.name = clubRecord.get('Name')
+      club.email = clubRecord.get('Contact Email')[0]
+
+      fetchEventsFrom(club.name).then(events => {
+        club.streak = events.length
+        sendCheckInTo(club)
+      })
+    })
   })
 }
-

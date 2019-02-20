@@ -15,5 +15,11 @@
   },
   "engines": {
     "node": "11.x"
+  },
+  "prettierConfig": {
+    "tabWidth": 4,
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "es5"
   }
 }
