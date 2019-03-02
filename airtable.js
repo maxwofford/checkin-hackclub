@@ -49,11 +49,8 @@ module.exports = () => {
         awaitingResponse = record.get('Type').indexOf('Awaiting response') !== -1
         checkIn = record.get('Type').indexOf('Check-in') !== -1
         meeting = record.get('Type').indexOf('Meeting') !== -1
-        if (checkIn && !awaitingResponse) {
-          index++
-        } else if (awaitingResponse) {
-          return index
-        }
+        if (checkIn && !awaitingResponse) index++
+        else if (awaitingResponse) return index
       })
       return index
     })
