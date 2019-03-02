@@ -34,16 +34,40 @@ module.exports = () => {
       )`,
       })
       .all()
+      
+  const findAll = clubName =>
+    base('History')
+      .select({
+        filterByFormula: `FIND('${clubName}', {Club})`
+      })
+      .all()
+
+  const calculateStreak = clubName => (
+    findAll(clubName).then(clubRecords => {
+      index = 0
+      clubRecords.forEach(record => {
+        awaitingResponse = record.get('Type').indexOf('Awaiting response') !== -1
+        checkIn = record.get('Type').indexOf('Check-in') !== -1
+        meeting = record.get('Type').indexOf('Meeting') !== -1
+        if (checkIn && !awaitingResponse) {
+          index++
+        } else if (awaitingResponse) {
+          return index
+        }
+      })
+      return index
+    })
+  )
 
   fetchClubs.then(clubs => {
     clubs.forEach(clubRecord => {
-      const club = {}
-      club.name = clubRecord.get('Name')
-      club.email = clubRecord.get('Contact Email')[0]
-
-      fetchEventsFrom(club.name).then(events => {
-        club.streak = events.length
-        sendCheckInTo(club)
+      let clubName = clubRecord.get('Name')
+      calculateStreak(clubName).then(streak => {
+        sendCheckInTo({
+          name: clubName,
+          email: clubRecord.get('Contact Email')[0],
+          streak
+        })
       })
     })
   })
