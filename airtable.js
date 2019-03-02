@@ -35,16 +35,40 @@ module.exports = () => {
       })
       .all()
 
+  const findIncomplete = clubName =>
+    base('History')
+      .select({
+        filterByFormula: `FIND('Awaiting response', {Type}), FIND('${clubName}', {Club})`
+      })
+      .all()
+
+  const findAll = clubName =>
+    base('History')
+      .select({
+        filterByFormula: `FIND('${clubName}', {Club})`
+      })
+      .all()
+
+  function calculateStreak(clubName) {
+    findAll(clubName).then(clubRecords => {
+      clubRecords.forEach(record => {
+        record.get('Type').forEach((type, index) => {
+          if (type === "Awaiting response") {
+            return index;
+          }
+        })
+      })
+    })
+  }
+
   fetchClubs.then(clubs => {
     clubs.forEach(clubRecord => {
       const club = {}
       club.name = clubRecord.get('Name')
       club.email = clubRecord.get('Contact Email')[0]
+      club.streak = calculateStreak(club.name)
 
-      fetchEventsFrom(club.name).then(events => {
-        club.streak = events.length
-        sendCheckInTo(club)
-      })
+      sendCheckInTo(club)
     })
   })
 }
