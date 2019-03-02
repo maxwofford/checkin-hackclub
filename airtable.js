@@ -49,7 +49,7 @@ module.exports = () => {
       })
       .all()
 
-  function calculateStreak(clubName) {
+  const calculateStreak = (clubName) => {
     findAll(clubName).then(clubRecords => {
       clubRecords.forEach(record => {
         record.get('Type').forEach((type, index) => {
