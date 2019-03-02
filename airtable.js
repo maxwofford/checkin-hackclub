@@ -34,14 +34,7 @@ module.exports = () => {
       )`,
       })
       .all()
-
-  const findIncomplete = clubName =>
-    base('History')
-      .select({
-        filterByFormula: `FIND('Awaiting response', {Type}), FIND('${clubName}', {Club})`
-      })
-      .all()
-
+      
   const findAll = clubName =>
     base('History')
       .select({
@@ -49,7 +42,7 @@ module.exports = () => {
       })
       .all()
 
-  const calculateStreak = (clubName) => {
+  const calculateStreak = clubName => {
     findAll(clubName).then(clubRecords => {
       clubRecords.forEach(record => {
         record.get('Type').forEach((type, index) => {
