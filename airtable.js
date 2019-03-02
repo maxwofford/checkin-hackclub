@@ -53,7 +53,7 @@ module.exports = () => {
     findAll(clubName).then(clubRecords => {
       clubRecords.forEach(record => {
         record.get('Type').forEach((type, index) => {
-          if (type === "Awaiting response") return index;
+          if (type === "Awaiting response") return index
         })
       })
     })
