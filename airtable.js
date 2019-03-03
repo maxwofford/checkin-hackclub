@@ -1,4 +1,5 @@
 const sendCheckInTo = require('./zapier')
+const streakMessage = require('./streakMessage')
 const Airtable = require('airtable')
 const secrets = require('./secrets')
 const base = new Airtable({ apiKey: secrets['AIRTABLE_API_KEY'] }).base(
@@ -62,11 +63,11 @@ module.exports = () => {
   fetchClubs.then(clubs => {
     clubs.forEach(clubRecord => {
       let clubName = clubRecord.get('Name')
-      calculateStreak(clubName).then(streak => {
+      calculateStreak(clubName).then(streakCount => {
         sendCheckInTo({
           name: clubName,
           email: clubRecord.get('Contact Email')[0],
-          streak
+          streak: streakMessage(streakCount)
         })
       })
     })
