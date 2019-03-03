@@ -11,15 +11,16 @@
   },
   "scripts": {
     "dev": "nodemon index.js",
-    "start": "node index.js"
-  },
-  "engines": {
-    "node": "11.x"
+    "start": "node index.js",
+    "fmt": "prettier \"*.js\" --single-quote --no-semi --use-tabs --write"
   },
   "prettierConfig": {
     "tabWidth": 4,
     "semi": false,
     "singleQuote": true,
     "trailingComma": "es5"
+  },
+  "devDependencies": {
+    "prettier": "1.16.4"
   }
 }
