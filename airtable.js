@@ -1,4 +1,5 @@
 const sendCheckInTo = require('./zapier')
+const streakMessage = require('./streakMessage')
 const Airtable = require('airtable')
 const secrets = require('./secrets')
 const base = new Airtable({ apiKey: secrets['AIRTABLE_API_KEY'] }).base(
