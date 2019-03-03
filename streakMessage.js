@@ -9,7 +9,7 @@ const countMessage = count => random([
 module.exports = count => {
   switch(true) {
     case (count < 2):
-      return null
+      return '<p>Hi!</p>'
     case (count < 3):
       return `<p>${countMessage(count)} Nice!</p>`
     case (count < 4):
