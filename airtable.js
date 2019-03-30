@@ -6,16 +6,19 @@ const base = new Airtable({ apiKey: secrets['AIRTABLE_API_KEY'] }).base(
   'apptEEFG5HTfGQE7h'
 )
 
-module.exports = () => {
+module.exports = dateArg => {
+  date = dateArg ? new Date(dateArg) : new Date().now
+
+  const dayIndex = dateArg ? date.getUTCDay() : new Date().getDay()
   const today = [
     'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-  ][new Date().getDay()]
+	'Monday',
+	'Tuesday',
+	'Wednesday',
+	'Thursday',
+	'Friday',
+	'Saturday'
+  ][dayIndex]
 
   const fetchClubs = base('Clubs')
     .select({
@@ -65,9 +68,10 @@ module.exports = () => {
       let clubName = clubRecord.get('Name')
       calculateStreak(clubName).then(streakCount => {
         sendCheckInTo({
-          name: clubName,
+		  name: clubName,
           email: clubRecord.get('Contact Email')[0],
-          streak: streakMessage(streakCount)
+		  streak: streakMessage(streakCount),
+		  date
         })
       })
     })

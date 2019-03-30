@@ -7,7 +7,7 @@ const secrets = require('./secrets')
 
 app.get('/', (req, res) => {
   if (req.query.password == secrets['PASSWORD']) {
-    triggerCheckIn()
+	triggerCheckIn(req.query.date)
     res.send('Success!')
   } else {
     res.send("<a href='https://www.youtube.com/watch?v=RfiQYRn7fBg'>Ah ah ah, you didn't say the magic word</a>")
