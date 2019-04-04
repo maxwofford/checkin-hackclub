@@ -2,7 +2,9 @@ const sendCheckInTo = require('./zapier')
 const streakMessage = require('./streakMessage')
 const Airtable = require('airtable')
 const secrets = require('./secrets')
-const base = new Airtable({ apiKey: secrets['AIRTABLE_API_KEY'] }).base(
+const base = new Airtable({
+  apiKey: secrets['AIRTABLE_API_KEY']
+}).base(
   'apptEEFG5HTfGQE7h'
 )
 
@@ -12,12 +14,12 @@ module.exports = dateArg => {
   const dayIndex = dateArg ? date.getUTCDay() : new Date().getDay()
   const today = [
     'Sunday',
-	'Monday',
-	'Tuesday',
-	'Wednesday',
-	'Thursday',
-	'Friday',
-	'Saturday'
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday'
   ][dayIndex]
 
   const fetchClubs = base('Clubs')
@@ -28,23 +30,23 @@ module.exports = dateArg => {
 
   const fetchEventsFrom = clubName =>
     base('History')
-      .select({
-        filterByFormula: `AND(
+    .select({
+      filterByFormula: `AND(
         FIND('${clubName}', {Club}),
         OR(
           FIND('Meeting', {Type}) != 0,
           FIND('Check-in', {Type}) != 0
         )
       )`,
-      })
-      .all()
-      
+    })
+    .all()
+
   const findAll = clubName =>
     base('History')
-      .select({
-        filterByFormula: `FIND('${clubName}', {Club})`
-      })
-      .all()
+    .select({
+      filterByFormula: `FIND('${clubName}', {Club})`
+    })
+    .all()
 
   const calculateStreak = clubName => (
     findAll(clubName).then(clubRecords => {
@@ -68,10 +70,10 @@ module.exports = dateArg => {
       let clubName = clubRecord.get('Name')
       calculateStreak(clubName).then(streakCount => {
         sendCheckInTo({
-		  name: clubName,
+          name: clubName,
           email: clubRecord.get('Contact Email')[0],
-		  streak: streakMessage(streakCount),
-		  date
+          streak: streakMessage(streakCount),
+          date: date
         })
       })
     })
