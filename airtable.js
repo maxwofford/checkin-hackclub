@@ -9,7 +9,7 @@ const base = new Airtable({
 )
 
 module.exports = dateArg => {
-  date = dateArg ? new Date(dateArg) : new Date().now
+  date = dateArg ? new Date(dateArg) : new Date()
 
   const dayIndex = dateArg ? date.getUTCDay() : new Date().getDay()
   const today = [
