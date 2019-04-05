@@ -24,6 +24,7 @@ module.exports = count => {
         ])
     default:
       return random([
+        `<p>${countMessage(count)} weird 💪 but ok</p>`,
         `<p>${countMessage(count)} uhhmazing!</p>`,
         `<p>${countMessage(count)} What the hack 0.0</p>`,
         `<p>${countMessage(count)} Yeouch!!!!</p>`,
